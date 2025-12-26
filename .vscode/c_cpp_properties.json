@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "STM32",
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "intelliSenseMode": "gcc-arm",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/CMSIS_5/CMSIS/Core/Include",
+                "${workspaceFolder}/cmsis-device-f4/Include",
+                "${workspaceFolder}/stm32f4xx-hal-driver/Inc",
+                "/usr/lib/gcc/arm-none-eabi/14.2.0/include"
+            ],
+
+            "defines": [
+                "STM32F407xx"
+            ]
+        }
+    ],
+    "version": 4
+}

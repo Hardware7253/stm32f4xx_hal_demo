@@ -1,0 +1,5 @@
+target
+stm32f4xx-hal-driver
+CMSIS_5
+cmsis-device-f4
+
