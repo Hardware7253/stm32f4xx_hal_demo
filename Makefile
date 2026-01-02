@@ -3,7 +3,9 @@ CC = arm-none-eabi-gcc
 CFLAGS  ?= -Wextra -Werror -Wshadow -Wformat-truncation -Wdouble-promotion -Os -g3 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MMD -MP
 LDFLAGS ?= -Tlink.ld -nostartfiles -nostdlib --specs nano.specs -lc -lgcc -Wl,--gc-sections -Wl,-Map=$@.map
 
-DEFINES := -DSTM32F407xx
+DEFINES := \
+	-DSTM32F407xx
+
 CFLAGS += $(DEFINES)
 
 INCLUDES := -I. \

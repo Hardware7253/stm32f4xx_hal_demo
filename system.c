@@ -21,7 +21,7 @@ void init_clocks(void) {
         RCC_PLLInitTypeDef pll_cfg = {
             .PLLState = RCC_PLL_ON,
             .PLLSource = RCC_PLLSOURCE_HSE,
-            .PLLM = 8,
+            .PLLM = 4,
             .PLLN = 168,
             .PLLP = RCC_PLLP_DIV2,
             .PLLQ = 4,
