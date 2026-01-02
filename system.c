@@ -9,12 +9,16 @@ void error_handler(HAL_StatusTypeDef status) {
 
 // Get stcuk in a while loop incase of an error
 // Also takes a pointer to an error message to be viewed by the debugger
-void error_handler_msg(HAL_StatusTypeDef status, char* msg) {
+void error_handler_msg(HAL_StatusTypeDef status, volatile char* msg) {
   while (status != 0) (void) msg;
 }
 
 
-// Init clocks for https://stm32-base.org/boards/STM32F407VGT6-STM32F4XX-M with max sysclk and peripheral clock speeds 
+// Init clocks for https://stm32-base.org/boards/STM32F407VGT6-STM32F4XX-M
+// SYSCLK = 168 MHz
+// HCLK =   168 MHz
+// PCLK1 =  42 MHz
+// PCLK2 =  84 MHz
 void init_clocks(void) {
     // Oscillator config
     {
@@ -27,21 +31,19 @@ void init_clocks(void) {
             .PLLQ = 4,
         };
 
-        RCC_OscInitTypeDef osc_cfg = {
-            .OscillatorType = RCC_OSCILLATORTYPE_HSE,
-            .HSEState = RCC_HSE_ON,
-            .LSEState = RCC_LSE_ON,
-            .HSIState = RCC_HSI_ON,
-            .HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT,
-            .PLL = pll_cfg,
-        };
+        // Turn on HSE
+        // Leave LSI, LSE, and HSI untouched
+        RCC_OscInitTypeDef osc_cfg;
+        osc_cfg.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+        osc_cfg.HSEState = RCC_HSE_ON;
+        osc_cfg.PLL = pll_cfg;
         error_handler_msg(HAL_RCC_OscConfig(&osc_cfg), "Error with oscillator config");
     }
 
     // Clock config
     {
         RCC_ClkInitTypeDef clk_cfg = {
-            .ClockType = RCC_CLOCKTYPE_SYSCLK,
+            .ClockType = RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2,
             .SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK,
             .AHBCLKDivider = RCC_SYSCLK_DIV1,
             .APB1CLKDivider = RCC_HCLK_DIV4,
