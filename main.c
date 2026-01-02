@@ -1,5 +1,4 @@
-#include <stdint.h>
-#include <stdbool.h>
+#include <stdint.h> #include <stdbool.h>
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
@@ -49,42 +48,6 @@ int main(void) {
         HAL_NVIC_SetPriority(TIM2_IRQn, 1, 0);
         HAL_NVIC_EnableIRQ(TIM2_IRQn);
         error_handler_msg(HAL_TIM_Base_Start_IT(&htim2), "Failed to start TIM");
-    }
-
-    // ADC config
-    {
-        GPIO_InitTypeDef pin_cfg;
-        pin_cfg.Pin = GPIO_PIN_0;
-        pin_cfg.Mode = GPIO_MODE_ANALOG;
-        pin_cfg.Pull = GPIO_NOPULL;
-        HAL_GPIO_Init(GPIOA, &pin_cfg);
-
-        // Clocked by APB2 peripheral clock (84MHz)
-        __HAL_RCC_ADC1_CLK_ENABLE();
-
-        hadc1.Instance = ADC1;
-        hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-        hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2; // 42 MHz
-        hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-        hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-        // hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T2_CC2;
-        // hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
-
-        ADC_ChannelConfTypeDef channel_cfg = {
-            .Channel = ADC_CHANNEL_2,
-            .Rank = 1,
-            .SamplingTime = ADC_SAMPLETIME_15CYCLES, // 2.8 Msps at 42 MHz (one sample every ~643 ns)
-        };
-
-        HAL_ADC_Init(&hadc1);
-        HAL_ADC_ConfigChannel(&hadc1, &channel_cfg);
-        
-        // HAL_ADC_Start_DMA(&hadc1, &data, 4);
-
-        // uint32_t data;
-        // HAL_ADC_Start(&hadc1);
-        // HAL_ADC_PollForConversion(&hadc1, 5);
-        // data = HAL_ADC_GetValue(&hadc1);
     }
 
     // 2 Hz software timer
